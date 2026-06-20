@@ -115,6 +115,11 @@ uv run pytest    # run the test suite (mocks HTTP; no live credentials needed)
 uv run main.py   # run the live sandbox demo (requires credentials)
 ```
 
+## Releasing
+
+Releases publish to PyPI automatically when a GitHub Release is published — see
+[RELEASING.md](RELEASING.md).
+
 ## License
 
 [MIT](LICENSE)

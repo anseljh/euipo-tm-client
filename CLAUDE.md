@@ -28,6 +28,7 @@ This project is managed with [`uv`](https://docs.astral.sh/uv/). Dev uses Python
 - Sync the environment: `uv sync`
 - Run an arbitrary command in the project venv: `uv run <cmd>`
 - Build distributions: `uv build`, then validate with `uvx --from twine twine check dist/*`
+- Releasing: publishing GitHub Release triggers `.github/workflows/publish.yml` (PyPI trusted publishing, OIDC). See `RELEASING.md` for the full process.
 
 - Run tests: `uv run pytest` (single test: `uv run pytest tests/test_client.py::test_name`)
 
