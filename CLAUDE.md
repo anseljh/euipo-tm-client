@@ -21,12 +21,13 @@ OAuth2 **client-credentials** flow: POST `grant_type=client_credentials` + `clie
 
 ## Tooling
 
-This project is managed with [`uv`](https://docs.astral.sh/uv/). Python 3.13+ is required (pinned in `.python-version`).
+This project is managed with [`uv`](https://docs.astral.sh/uv/). Dev uses Python 3.13 (pinned in `.python-version`); the published package targets `>=3.10`. The floor is coupled to dev deps — pytest 9 requires `>=3.10`, so don't lower `requires-python` below that without downgrading pytest.
 
 - Run the app: `uv run main.py`
 - Add a dependency: `uv add <package>` (updates `pyproject.toml` + `uv.lock`)
 - Sync the environment: `uv sync`
 - Run an arbitrary command in the project venv: `uv run <cmd>`
+- Build distributions: `uv build`, then validate with `uvx --from twine twine check dist/*`
 
 - Run tests: `uv run pytest` (single test: `uv run pytest tests/test_client.py::test_name`)
 
@@ -49,3 +50,9 @@ The `sandbox`/`production` split selects the API base URL; honor `EUIPO_ENVIRONM
 
 - OpenAPI specification: `specs/openapi.json` — the source of truth for endpoints, request/response schemas, and parameters.
 - Authentication details: https://dev-sandbox.euipo.europa.eu/security
+
+### Gotchas
+
+- A `403` "Not registered to plan" means auth succeeded but the app isn't subscribed to the Trademark search plan in the dev portal (account fix, not a code bug).
+- `W`-prefixed application numbers (e.g. `W00893924`) are international registrations: `applicationDate` is null — fall back to `designationDate`.
+- RSQL `query` param: use `field==*term*` for a contains/wildcard match (see README "Query language (RSQL)").

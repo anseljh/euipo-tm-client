@@ -67,6 +67,44 @@ API and authentication failures raise typed exceptions, all subclasses of
 - `EUIPOAPIError` — the API returned a non-2xx response; exposes `.status_code`
   and the parsed `.body`.
 
+## Query language (RSQL)
+
+The `query` argument of `search_trademarks()` accepts an **RSQL** (REST Query
+Language) expression — a compact, URL-friendly filter syntax. A clause is
+`field` + `operator` + `value`, and clauses combine with `and` / `or` (use
+parentheses to group). RSQL avoids unsafe characters, so no URL encoding is
+needed.
+
+Comparison operators:
+
+| Operator           | Meaning                                  |
+| ------------------ | ---------------------------------------- |
+| `==`               | equal to (supports `*` as a wildcard)    |
+| `!=`               | not equal to (supports `*` as a wildcard)|
+| `<` `<=` `>` `>=`  | range comparison (dates and numbers)     |
+| `=in=`             | in a set, e.g. `=in=(WORD,FIGURATIVE)`   |
+| `=out=`            | not in a set                             |
+| `=all=`            | contains all of a set                    |
+
+Each field supports only a subset of these operators. Date fields
+(`applicationDate`, `registrationDate`, `expiryDate`, …) expect `yyyy-MM-dd`
+values. Examples:
+
+```text
+# Verbal element exactly "apple"
+wordMarkSpecification.verbalElement==apple
+
+# Wildcard match + status, with nice-class membership
+niceClasses=all=(25,28,40) and wordMarkSpecification.verbalElement==*Dog* and status==REGISTERED
+
+# Date range with grouped OR logic
+applicationDate>=2023-05-04 and ((markFeature==FIGURATIVE and niceClasses=all=(25,26)) or (markFeature==WORD and niceClasses=out=(40)))
+```
+
+The full grammar, the list of supported fields, and the operators each field
+allows are documented in the `query` parameter of the OpenAPI spec
+(`specs/openapi.json`).
+
 ## Development
 
 This project is managed with [`uv`](https://docs.astral.sh/uv/).
