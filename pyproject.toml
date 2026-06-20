@@ -1,6 +1,6 @@
 [project]
 name = "euipo-tm-client"
-version = "0.1.0"
+version = "0.1.1"
 description = "Minimal Python client for the EUIPO trademark search API"
 readme = "README.md"
 requires-python = ">=3.10"
