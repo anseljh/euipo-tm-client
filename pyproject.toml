@@ -1,11 +1,51 @@
 [project]
 name = "euipo-tm-client"
 version = "0.1.0"
-description = "Minimal Python client for EUIPO trademark search API"
+description = "Minimal Python client for the EUIPO trademark search API"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Ansel Halliburton", email = "anseljh@gmail.com" }]
+keywords = ["euipo", "trademark", "intellectual-property", "ip", "api-client"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Legal Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
 dependencies = [
     "httpx>=0.28.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/anseljh/euipo-tm-client"
+Repository = "https://github.com/anseljh/euipo-tm-client"
+Issues = "https://github.com/anseljh/euipo-tm-client/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["euipo_tm_client"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "euipo_tm_client",
+    "tests",
+    "specs/openapi.json",
+    "README.md",
+    "LICENSE",
 ]
 
 [dependency-groups]
