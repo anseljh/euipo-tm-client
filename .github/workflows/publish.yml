@@ -1,0 +1,44 @@
+name: Publish to PyPI
+
+# Build and publish to PyPI when a GitHub Release is published.
+# Uses PyPI Trusted Publishing (OIDC) — no API token is stored in the repo.
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Build sdist and wheel
+        run: uv build
+      - name: Check metadata
+        run: uvx --from twine twine check dist/*
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    # The environment name must match the Trusted Publisher configured on PyPI.
+    environment:
+      name: pypi
+      url: https://pypi.org/project/euipo-tm-client/
+    permissions:
+      id-token: write  # required for OIDC trusted publishing
+    steps:
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
